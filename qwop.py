@@ -3,7 +3,7 @@ import sys, pygame
 pygame.init()
 
 size = width, height = 320, 240
-ser = serial.Serial("COM4")
+ser = serial.Serial("/dev/ttyACM2")
 
 screen = pygame.display.set_mode(size)
 
