@@ -1,6 +1,6 @@
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
 
 #include <iostream>
 #include <stdio.h>
@@ -77,8 +77,8 @@ int main() {
 	set_blocking(fd, 0);
 
 	// declare a VideoCapture object to associate webcam, 0 means use 1st (default) webcam
-	cv::VideoCapture capWebcam(1);		
-
+	//may need to use a different index
+	cv::VideoCapture capWebcam(1);
 	//  To check if object was associated to webcam successfully
 	if (capWebcam.isOpened() == false)	 
 	{				
@@ -125,7 +125,7 @@ int main() {
 		}
 
 		// Convert Original Image to HSV Thresh Image
-		cv::cvtColor(imgOriginal, hsvImg, CV_BGR2HSV);						
+		cv::cvtColor(imgOriginal, hsvImg, cv::COLOR_BGR2HSV);						
 
 		cv::inRange(hsvImg, cv::Scalar(lowH, lowS, lowV), cv::Scalar(highH, highS, highV), threshImg);
 
@@ -140,10 +140,10 @@ int main() {
 
 		// fill circles vector with all circles in processed image
 		// algorithm for detecting circles
-		cv::HoughCircles(threshImg,v3fCircles,CV_HOUGH_GRADIENT,2,threshImg.rows / 4,100,50,10,800);
+		cv::HoughCircles(threshImg,v3fCircles,cv::HOUGH_GRADIENT,2,threshImg.rows / 4,100,50,10,800);
 		contours.clear();
 		hierarchy.clear();
-		findContours(threshImg,contours,hierarchy,CV_RETR_TREE,CV_CHAIN_APPROX_SIMPLE,cv::Point(0,0));
+		findContours(threshImg,contours,hierarchy,cv::RETR_TREE,cv::CHAIN_APPROX_SIMPLE,cv::Point(0,0));
 		if(contours.size()) {
 			cv::drawContours(imgOriginal,contours,-1,cv::Scalar(255,255,0));
 			int largest_area = 0;
@@ -196,8 +196,8 @@ int main() {
 		}
 
 		// declare windows
-		cv::namedWindow("imgOriginal", CV_WINDOW_AUTOSIZE);
-		cv::namedWindow("threshImg", CV_WINDOW_AUTOSIZE);	
+		cv::namedWindow("imgOriginal", cv::WINDOW_AUTOSIZE);
+		cv::namedWindow("threshImg", cv::WINDOW_AUTOSIZE);	
 
 	    /* Create trackbars in "threshImg" window to adjust according to object and environment.*/
 		cv::createTrackbar("LowH", "threshImg", &lowH, 179);	//Hue (0 - 179)
