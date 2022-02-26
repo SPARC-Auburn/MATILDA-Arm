@@ -73,7 +73,7 @@ int main() {
  	std::vector<cv::Vec4i> hierarchy;
 
 	fd = open(PORT, O_RDWR | O_NOCTTY | O_SYNC);
-	set_interface_attribs(fd, B115200, 0);
+	set_interface_attribs(fd, B115200, 0);		//If you get "error 9 from tcgetattr", that probably means the serial port wasn't opened
 	set_blocking(fd, 0);
 
 	// declare a VideoCapture object to associate webcam, 0 means use 1st (default) webcam
@@ -123,6 +123,8 @@ int main() {
 			std::cout << "error: frame can't read \n";
 			break;
 		}
+
+		cv::rotate(imgOriginal, imgOriginal, cv::ROTATE_90_CLOCKWISE);
 
 		// Convert Original Image to HSV Thresh Image
 		cv::cvtColor(imgOriginal, hsvImg, cv::COLOR_BGR2HSV);						
@@ -194,6 +196,10 @@ int main() {
 				write(fd, "s_v\n", 4);
 			}
 		}
+		else {
+			write(fd, "s_v\n", 4);
+			write(fd, "s_h\n", 4);
+		}
 
 		// declare windows
 		cv::namedWindow("imgOriginal", cv::WINDOW_AUTOSIZE);
@@ -216,6 +222,8 @@ int main() {
 
 		charCheckForEscKey = cv::waitKey(1);					// delay and get key press
 	}
+	write(fd, "s_h\n", 4);
+	write(fd, "s_v\n", 4);
 	
 	return 0;											
 }
